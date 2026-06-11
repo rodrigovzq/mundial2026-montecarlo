@@ -81,6 +81,9 @@ def build_strength_matrix(
     anotados por team_a cuando enfrento a team_b. Usa los pesos combinados
     (temporales + torneo).
     """
+    # Filter out placeholder matches with NaN scores (e.g. unplayed 2026 WC fixtures)
+    matches = matches.dropna(subset=["home_score", "away_score"]).copy()
+
     pairs: dict[tuple[str, str], list[float]] = {}
 
     for _, row in matches.iterrows():
@@ -117,7 +120,7 @@ def get_team_lambdas(
     s12 = strength_matrix.get(key12)
     s21 = strength_matrix.get(key21)
 
-    if s12 is not None and s21 is not None and (s12 + s21) > 0:
+    if s12 is not None and s21 is not None and not (np.isnan(s12) or np.isnan(s21)) and (s12 + s21) > 0:
         total = s12 + s21
         lambda_1 = config.BASE_GOALS_PER_MATCH * s12 / total
         lambda_2 = config.BASE_GOALS_PER_MATCH * s21 / total
