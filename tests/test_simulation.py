@@ -1,0 +1,93 @@
+"""Tests para src/simulation.py (SPEC Section 6)."""
+
+import pytest
+import pandas as pd
+import numpy as np
+from config import SimulationConfig
+from src.model import MatchPredictor
+
+
+class TestRunSimulation:
+    """Prueba el motor Montecarlo (SPEC 6.2)."""
+
+    def test_run_returns_counts_and_snapshots(self, sample_matches_df, config):
+        from src.simulation import run_simulation
+        predictor = MatchPredictor(sample_matches_df, config)
+        rng = np.random.default_rng(42)
+
+        counts, snapshots = run_simulation(predictor, config, rng)
+        assert isinstance(counts, dict)
+        assert isinstance(snapshots, list)
+
+    def test_counts_sum_to_iterations(self, sample_matches_df, config):
+        from src.simulation import run_simulation
+        predictor = MatchPredictor(sample_matches_df, config)
+        rng = np.random.default_rng(42)
+
+        counts, _ = run_simulation(predictor, config, rng)
+        total = sum(counts.values())
+        assert total == config.ITERATIONS
+
+    def test_snapshots_every_100_iterations(self, sample_matches_df, config):
+        from src.simulation import run_simulation
+        predictor = MatchPredictor(sample_matches_df, config)
+        rng = np.random.default_rng(42)
+
+        _, snapshots = run_simulation(predictor, config, rng)
+        expected_snapshots = config.ITERATIONS // 100
+        assert len(snapshots) == expected_snapshots
+
+    def test_snapshot_contains_top_10(self, sample_matches_df, config):
+        from src.simulation import run_simulation
+        predictor = MatchPredictor(sample_matches_df, config)
+        rng = np.random.default_rng(42)
+
+        _, snapshots = run_simulation(predictor, config, rng)
+        last_snap = snapshots[-1]
+        assert "team" in last_snap.columns
+        assert "probability" in last_snap.columns
+        assert "iteration" in last_snap.columns
+        assert len(last_snap) == 10
+
+    def test_probabilities_in_snapshot_sum_to_100(self, sample_matches_df, config):
+        from src.simulation import run_simulation
+        predictor = MatchPredictor(sample_matches_df, config)
+        rng = np.random.default_rng(42)
+
+        _, snapshots = run_simulation(predictor, config, rng)
+        last_snap = snapshots[-1]
+        total_prob = last_snap["probability"].sum()
+        assert abs(total_prob - 100.0) < 1.0
+
+    def test_reproducible_with_same_seed(self, sample_matches_df, config):
+        from src.simulation import run_simulation
+        predictor = MatchPredictor(sample_matches_df, config)
+
+        rng1 = np.random.default_rng(42)
+        rng2 = np.random.default_rng(42)
+
+        counts1, _ = run_simulation(predictor, config, rng1)
+        counts2, _ = run_simulation(predictor, config, rng2)
+
+        assert counts1 == counts2
+
+    def test_different_seed_gives_different_counts(self, sample_matches_df, config):
+        from src.simulation import run_simulation
+        predictor = MatchPredictor(sample_matches_df, config)
+
+        rng1 = np.random.default_rng(42)
+        rng2 = np.random.default_rng(99)
+
+        counts1, _ = run_simulation(predictor, config, rng1)
+        counts2, _ = run_simulation(predictor, config, rng2)
+
+        assert counts1 != counts2
+
+    def test_snapshot_probability_evolution(self, sample_matches_df, config):
+        from src.simulation import run_simulation
+        predictor = MatchPredictor(sample_matches_df, config)
+        rng = np.random.default_rng(42)
+
+        _, snapshots = run_simulation(predictor, config, rng)
+        for i, snap in enumerate(snapshots):
+            assert (snap["iteration"] == (i + 1) * 100).all()
