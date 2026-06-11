@@ -1,4 +1,4 @@
-"""Modelo estadistico para simulacion de partidos (SPEC Section 4)."""
+"""Modelo estadistico para simulacion de partidos."""
 
 import numpy as np
 import pandas as pd
@@ -45,13 +45,13 @@ class MatchPredictor:
         return (int(rng.poisson(lambda1)), int(rng.poisson(lambda2)))
 
     def predict_most_likely(self, team1: str, team2: str) -> tuple[int, int]:
-        """Predice el resultado mas probable (moda de Poisson) sin aleatoriedad.
+        """Predice el resultado esperado redondeado sin aleatoriedad.
 
-        La moda de Poisson(lambda) es int(floor(lambda)).
-        Esto da el resultado esperado 'promedio' del partido.
+        Usa round(lambda) en vez de floor(lambda) para reflejar mejor
+        el valor esperado de la distribucion de Poisson, no solo la moda.
         """
         lambda1, lambda2 = self.get_lambdas(team1, team2)
-        return (int(np.floor(lambda1)), int(np.floor(lambda2)))
+        return (max(0, int(round(lambda1))), max(0, int(round(lambda2))))
 
     def simulate_extra_time(
         self, team1: str, team2: str, rng: np.random.Generator,
