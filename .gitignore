@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Resultados grandes (mantener solo .gitkeep)
+results/*.csv
+results/*.png
+results/*.json
+!results/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Datos descargados (no commitear datasets grandes)
+data/matches.csv
+data/*.db
+data/*.sqlite
