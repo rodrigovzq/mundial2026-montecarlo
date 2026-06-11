@@ -22,6 +22,30 @@ def classify_tournament(tournament: str) -> str:
     return "default"
 
 
+def compute_weights(df: pd.DataFrame, config: SimulationConfig) -> pd.DataFrame:
+    """Anade columna 'weight' a un DataFrame de partidos (SPEC 4.1).
+
+    Clasifica torneos, calcula decaimiento temporal y combina ambos pesos.
+    No modifica el DataFrame original.
+    """
+    result = df.copy()
+    if not pd.api.types.is_datetime64_any_dtype(result["date"]):
+        result["date"] = pd.to_datetime(result["date"])
+    if "tournament_category" not in result.columns:
+        result["tournament_category"] = result["tournament"].map(classify_tournament)
+
+    current_year = config.YEAR_MAX
+    result["years_ago"] = current_year - result["date"].dt.year
+    result["time_weight"] = np.exp(-config.LAMBDA_DECAY * result["years_ago"])
+
+    result["weight"] = (
+        result["time_weight"]
+        * result["tournament_category"].map(config.TOURNAMENT_WEIGHTS).fillna(0.5)
+    )
+
+    return result
+
+
 def load_matches(filepath: str, config: SimulationConfig) -> pd.DataFrame:
     """Carga y limpia el dataset historico (SPEC 3.2, 3.3).
 
@@ -37,14 +61,7 @@ def load_matches(filepath: str, config: SimulationConfig) -> pd.DataFrame:
 
     df["tournament_category"] = df["tournament"].map(classify_tournament)
 
-    current_year = config.YEAR_MAX
-    df["years_ago"] = current_year - df["date"].dt.year
-    df["time_weight"] = np.exp(-config.LAMBDA_DECAY * df["years_ago"])
-
-    df["weight"] = (
-        df["time_weight"]
-        * df["tournament_category"].map(config.TOURNAMENT_WEIGHTS).fillna(0.5)
-    )
+    df = compute_weights(df, config)
 
     return df
 
