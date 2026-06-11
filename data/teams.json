@@ -1,0 +1,63 @@
+{
+  "teams": [
+    {"name": "Argentina",    "group": "A", "fifa_rank": 1},
+    {"name": "Switzerland",  "group": "A", "fifa_rank": 17},
+    {"name": "Nigeria",      "group": "A", "fifa_rank": 23},
+    {"name": "Iran",         "group": "A", "fifa_rank": 28},
+
+    {"name": "France",       "group": "B", "fifa_rank": 2},
+    {"name": "Senegal",      "group": "B", "fifa_rank": 19},
+    {"name": "USA",          "group": "B", "fifa_rank": 15},
+    {"name": "Australia",    "group": "B", "fifa_rank": 29},
+
+    {"name": "Brazil",       "group": "C", "fifa_rank": 3},
+    {"name": "Germany",      "group": "C", "fifa_rank": 9},
+    {"name": "Egypt",        "group": "C", "fifa_rank": 31},
+    {"name": "Japan",        "group": "C", "fifa_rank": 16},
+
+    {"name": "Spain",        "group": "D", "fifa_rank": 4},
+    {"name": "Tunisia",      "group": "D", "fifa_rank": 32},
+    {"name": "South Korea",  "group": "D", "fifa_rank": 27},
+    {"name": "Canada",       "group": "D", "fifa_rank": 37},
+
+    {"name": "England",      "group": "E", "fifa_rank": 5},
+    {"name": "Algeria",      "group": "E", "fifa_rank": 33},
+    {"name": "Mexico",       "group": "E", "fifa_rank": 20},
+    {"name": "Saudi Arabia", "group": "E", "fifa_rank": 34},
+
+    {"name": "Portugal",     "group": "F", "fifa_rank": 6},
+    {"name": "Morocco",      "group": "F", "fifa_rank": 14},
+    {"name": "Uruguay",      "group": "F", "fifa_rank": 12},
+    {"name": "Qatar",        "group": "F", "fifa_rank": 45},
+
+    {"name": "Netherlands",  "group": "G", "fifa_rank": 7},
+    {"name": "Colombia",     "group": "G", "fifa_rank": 13},
+    {"name": "Ghana",        "group": "G", "fifa_rank": 40},
+    {"name": "UAE",          "group": "G", "fifa_rank": 46},
+
+    {"name": "Belgium",      "group": "H", "fifa_rank": 8},
+    {"name": "Ecuador",      "group": "H", "fifa_rank": 21},
+    {"name": "Cameroon",     "group": "H", "fifa_rank": 41},
+    {"name": "Costa Rica",   "group": "H", "fifa_rank": 38},
+
+    {"name": "Italy",        "group": "I", "fifa_rank": 10},
+    {"name": "Croatia",      "group": "I", "fifa_rank": 11},
+    {"name": "Ivory Coast",  "group": "I", "fifa_rank": 42},
+    {"name": "Paraguay",     "group": "I", "fifa_rank": 35},
+
+    {"name": "Denmark",      "group": "J", "fifa_rank": 18},
+    {"name": "Austria",      "group": "J", "fifa_rank": 30},
+    {"name": "DR Congo",     "group": "J", "fifa_rank": 43},
+    {"name": "Peru",         "group": "J", "fifa_rank": 36},
+
+    {"name": "Serbia",       "group": "K", "fifa_rank": 24},
+    {"name": "Sweden",       "group": "K", "fifa_rank": 22},
+    {"name": "Iraq",         "group": "K", "fifa_rank": 47},
+    {"name": "Panama",       "group": "K", "fifa_rank": 39},
+
+    {"name": "Turkey",       "group": "L", "fifa_rank": 26},
+    {"name": "Ukraine",      "group": "L", "fifa_rank": 25},
+    {"name": "New Zealand",  "group": "L", "fifa_rank": 48},
+    {"name": "Jamaica",      "group": "L", "fifa_rank": 44}
+  ]
+}
