@@ -14,6 +14,7 @@ class SimulationConfig:
         MIN_MATCHES: Minimo de partidos historicos para usar datos directos (SPEC 4.3).
         YEAR_MIN: Inicio ventana temporal (SPEC 3.2).
         YEAR_MAX: Fin ventana temporal.
+        DECAY_WINDOW: Ventana fija en anos para decaimiento lineal (SPEC 4.1.1).
         EXTRA_TIME_GOAL_FACTOR: Factor de reduccion de goles en alargue.
         PENALTY_BIAS: Sesgo maximo por diferencia de fuerza en penales (SPEC 4.2.4).
         TOURNAMENT_WEIGHTS: Pesos por tipo de torneo (SPEC 4.1.2).
@@ -23,8 +24,9 @@ class SimulationConfig:
     SEED: int = 42
     LAMBDA_DECAY: float = 0.15
     MIN_MATCHES: int = 3
-    YEAR_MIN: int = 2004
+    YEAR_MIN: int = 1872
     YEAR_MAX: int = 2026
+    DECAY_WINDOW: int = 30
     EXTRA_TIME_GOAL_FACTOR: float = 0.3
     PENALTY_BIAS: float = 0.15
     BASE_GOALS_PER_MATCH: float = 2.5

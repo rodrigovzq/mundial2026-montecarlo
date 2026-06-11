@@ -25,7 +25,9 @@ def classify_tournament(tournament: str) -> str:
 def compute_weights(df: pd.DataFrame, config: SimulationConfig) -> pd.DataFrame:
     """Anade columna 'weight' a un DataFrame de partidos (SPEC 4.1).
 
-    Clasifica torneos, calcula decaimiento temporal lineal con minimo 0.2 y combina ambos pesos.
+    Clasifica torneos, calcula decaimiento temporal lineal (con ventana
+    fija DECAY_WINDOW) y combina ambos pesos. Datos mas viejos que
+    DECAY_WINDOW tienen un peso minimo de 0.2.
     No modifica el DataFrame original.
     """
     result = df.copy()
@@ -36,8 +38,8 @@ def compute_weights(df: pd.DataFrame, config: SimulationConfig) -> pd.DataFrame:
 
     current_year = config.YEAR_MAX
     result["years_ago"] = current_year - result["date"].dt.year
-    window_size = config.YEAR_MAX - config.YEAR_MIN
-    result["time_weight"] = 1.0 - 0.8 * result["years_ago"] / window_size
+    window = config.DECAY_WINDOW
+    result["time_weight"] = np.maximum(0.2, 1.0 - 0.8 * result["years_ago"] / window)
 
     result["weight"] = (
         result["time_weight"]

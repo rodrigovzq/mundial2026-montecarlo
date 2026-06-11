@@ -13,6 +13,7 @@ class TestSimulationConfig:
         assert cfg.ITERATIONS == 10_000
         assert cfg.SEED == 42
         assert cfg.LAMBDA_DECAY == 0.15
+        assert cfg.DECAY_WINDOW == 30
 
     def test_tournament_weights_contain_key_categories(self):
         """Verifica que existan pesos para las categorias principales (SPEC 4.1.2)."""

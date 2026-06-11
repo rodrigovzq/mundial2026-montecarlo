@@ -67,8 +67,8 @@ def main() -> int:
 
     # 0. Configuracion
     config = SimulationConfig()
-    log.info("Configuracion: %d iteraciones, seed=%d, lambda=%.2f",
-             config.ITERATIONS, config.SEED, config.LAMBDA_DECAY)
+    log.info("Configuracion: %d iteraciones, seed=%d, decay_window=%d años",
+             config.ITERATIONS, config.SEED, config.DECAY_WINDOW)
 
     # 1. Datos
     data_path = ensure_data()

@@ -7,7 +7,7 @@
 
     {"name": "Canada",        "group": "B", "fifa_rank": 33},
     {"name": "Switzerland",   "group": "B", "fifa_rank": 19},
-    {"name": "Bosnia",        "group": "B", "fifa_rank": 52},
+    {"name": "Bosnia and Herzegovina", "group": "B", "fifa_rank": 52},
     {"name": "Qatar",         "group": "B", "fifa_rank": 44},
 
     {"name": "Brazil",        "group": "C", "fifa_rank": 6},
@@ -15,7 +15,7 @@
     {"name": "Scotland",      "group": "C", "fifa_rank": 39},
     {"name": "Haiti",         "group": "C", "fifa_rank": 86},
 
-    {"name": "USA",           "group": "D", "fifa_rank": 16},
+    {"name": "United States", "group": "D", "fifa_rank": 16},
     {"name": "Turkey",        "group": "D", "fifa_rank": 36},
     {"name": "Australia",     "group": "D", "fifa_rank": 28},
     {"name": "Paraguay",      "group": "D", "fifa_rank": 45},
