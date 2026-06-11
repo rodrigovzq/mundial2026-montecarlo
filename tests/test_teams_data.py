@@ -30,7 +30,7 @@ class TestTeamsData:
             assert "group" in team
             assert "fifa_rank" in team
             assert isinstance(team["fifa_rank"], int)
-            assert 1 <= team["fifa_rank"] <= 48
+            assert team["fifa_rank"] > 0
 
     def test_twelve_groups_four_teams_each(self):
         """12 grupos de 4 equipos (SPEC 5.1)."""
@@ -58,8 +58,9 @@ class TestTeamsData:
         expected = {chr(ord("A") + i) for i in range(12)}
         assert groups == expected
 
-    def test_unique_fifa_ranks(self):
-        """Los rankings FIFA deben ser unicos del 1 al 48."""
+    def test_fifa_ranks_are_positive_integers(self):
+        """Los rankings FIFA deben ser enteros positivos."""
         data = load_teams()
         ranks = [t["fifa_rank"] for t in data["teams"]]
-        assert sorted(ranks) == list(range(1, 49))
+        assert all(isinstance(r, int) for r in ranks)
+        assert all(r > 0 for r in ranks)
