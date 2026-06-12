@@ -14,11 +14,6 @@ ENV/
 *.swo
 *~
 
-# Resultados grandes (mantener solo .gitkeep)
-results/*.csv
-results/*.png
-results/*.json
-!results/.gitkeep
 
 # OS
 .DS_Store
@@ -28,14 +23,14 @@ Thumbs.db
 .ipynb_checkpoints/
 *.ipynb
 
-# Especificación (no incluir en repo público)
+# Especificación
 SPEC.md
 
 # Tool artifacts
 .atl/
 docs/
 
-# Datos descargados (no commitear datasets grandes)
+# Datos descargados
 data/matches.csv
 data/*.db
 data/*.sqlite

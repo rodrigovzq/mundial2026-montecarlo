@@ -1,0 +1,73 @@
+group,home,away,predicted_home_goals,predicted_away_goals,samples
+A,Mexico,South Korea,1,0,10000
+A,Mexico,Czech Republic,0,1,10000
+A,Mexico,South Africa,1,1,10000
+A,South Korea,Czech Republic,0,1,10000
+A,South Korea,South Africa,1,1,10000
+A,Czech Republic,South Africa,1,1,10000
+B,Canada,Switzerland,1,0,10000
+B,Canada,Bosnia and Herzegovina,1,1,10000
+B,Canada,Qatar,2,0,10000
+B,Switzerland,Bosnia and Herzegovina,0,2,10000
+B,Switzerland,Qatar,0,2,10000
+B,Bosnia and Herzegovina,Qatar,0,1,10000
+C,Brazil,Morocco,1,0,10000
+C,Brazil,Scotland,2,0,10000
+C,Brazil,Haiti,2,0,10000
+C,Morocco,Scotland,2,0,10000
+C,Morocco,Haiti,1,0,10000
+C,Scotland,Haiti,1,1,10000
+D,United States,Turkey,1,1,10000
+D,United States,Australia,1,0,10000
+D,United States,Paraguay,1,0,10000
+D,Turkey,Australia,1,0,10000
+D,Turkey,Paraguay,1,1,10000
+D,Australia,Paraguay,1,0,10000
+E,Germany,Ecuador,2,0,10000
+E,Germany,Ivory Coast,1,1,10000
+E,Germany,Curacao,1,0,10000
+E,Ecuador,Ivory Coast,1,1,10000
+E,Ecuador,Curacao,1,1,10000
+E,Ivory Coast,Curacao,1,1,10000
+F,Netherlands,Japan,2,0,10000
+F,Netherlands,Sweden,1,1,10000
+F,Netherlands,Tunisia,1,0,10000
+F,Japan,Sweden,1,1,10000
+F,Japan,Tunisia,1,1,10000
+F,Sweden,Tunisia,1,1,10000
+G,Belgium,Iran,1,1,10000
+G,Belgium,Egypt,1,1,10000
+G,Belgium,New Zealand,1,0,10000
+G,Iran,Egypt,1,1,10000
+G,Iran,New Zealand,2,0,10000
+G,Egypt,New Zealand,2,0,10000
+H,Spain,Uruguay,1,0,10000
+H,Spain,Saudi Arabia,2,0,10000
+H,Spain,Cape Verde,1,0,10000
+H,Uruguay,Saudi Arabia,1,0,10000
+H,Uruguay,Cape Verde,1,1,10000
+H,Saudi Arabia,Cape Verde,1,1,10000
+I,France,Norway,1,1,10000
+I,France,Senegal,0,2,10000
+I,France,Iraq,2,0,10000
+I,Norway,Senegal,0,1,10000
+I,Norway,Iraq,1,1,10000
+I,Senegal,Iraq,1,1,10000
+J,Argentina,Austria,1,0,10000
+J,Argentina,Algeria,1,1,10000
+J,Argentina,Jordan,1,0,10000
+J,Austria,Algeria,2,0,10000
+J,Austria,Jordan,1,1,10000
+J,Algeria,Jordan,2,0,10000
+K,Portugal,Colombia,1,1,10000
+K,Portugal,DR Congo,1,0,10000
+K,Portugal,Uzbekistan,1,0,10000
+K,Colombia,DR Congo,1,1,10000
+K,Colombia,Uzbekistan,1,0,10000
+K,DR Congo,Uzbekistan,1,1,10000
+L,England,Croatia,1,0,10000
+L,England,Ghana,1,1,10000
+L,England,Panama,2,0,10000
+L,Croatia,Ghana,1,1,10000
+L,Croatia,Panama,1,1,10000
+L,Ghana,Panama,1,1,10000

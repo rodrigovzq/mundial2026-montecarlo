@@ -20,7 +20,7 @@ class SimulationConfig:
         TOURNAMENT_WEIGHTS: Pesos por tipo de torneo (SPEC 4.1.2).
         BASE_GOALS_PER_MATCH: Goles totales base por partido.
     """
-    ITERATIONS: int = 100_000
+    ITERATIONS: int = 10_000
     SEED: int = 42
     LAMBDA_DECAY: float = 0.15
     MIN_MATCHES: int = 3
