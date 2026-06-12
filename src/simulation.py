@@ -18,7 +18,7 @@ def run_simulation(
     predictor: MatchPredictor,
     config: SimulationConfig,
     rng: np.random.Generator,
-) -> tuple[dict[str, int], list[pd.DataFrame]]:
+) -> tuple[dict[str, int], list[pd.DataFrame], dict[tuple[str, str, str], dict[str, int]]]:
     """Ejecuta el loop Montecarlo completo (SPEC 6.2).
 
     Args:
@@ -27,19 +27,29 @@ def run_simulation(
         rng: Generador de numeros aleatorios.
 
     Returns:
-        Tupla (winner_counts, snapshots):
+        Tupla (winner_counts, snapshots, match_score_counts):
         - winner_counts: dict {team_name: count}
         - snapshots: lista de DataFrames (uno cada 100 iteraciones) con top-10
+        - match_score_counts: dict {(group, home, away): {score_str: count}}
     """
     winner_counts: dict[str, int] = Counter()
     snapshots: list[pd.DataFrame] = []
+    match_score_counts: dict[tuple[str, str, str], dict[str, int]] = {}
 
     total = config.ITERATIONS
     pbar = tqdm(total=total, desc="Simulando mundiales", unit="iter")
 
     for i in range(1, total + 1):
-        winner = simulate_tournament(predictor, config, rng)
+        winner, match_results = simulate_tournament(predictor, config, rng)
         winner_counts[winner] = winner_counts.get(winner, 0) + 1
+
+        # Track group match results
+        for m in match_results:
+            key = (m["group"], m["home"], m["away"])
+            score_key = f"{m['goals_home']}-{m['goals_away']}"
+            if key not in match_score_counts:
+                match_score_counts[key] = {}
+            match_score_counts[key][score_key] = match_score_counts[key].get(score_key, 0) + 1
 
         if i % 100 == 0:
             total_so_far = i
@@ -62,4 +72,4 @@ def run_simulation(
         pbar.update(1)
 
     pbar.close()
-    return dict(winner_counts), snapshots
+    return dict(winner_counts), snapshots, match_score_counts

@@ -144,3 +144,30 @@ def build_group_stage_predictions_table(
     print("=" * 70)
 
     return df
+
+
+def export_group_stage_predictions(
+    predictions_df: pd.DataFrame,
+    output_path: str = "results/group_stage_predictions.csv",
+) -> pd.DataFrame:
+    """Exporta predicciones de fase de grupos desde Monte Carlo y las muestra en consola."""
+    if predictions_df.empty:
+        log.warning("No hay predicciones de grupo para exportar")
+        return predictions_df
+
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
+    predictions_df.to_csv(output_path, index=False)
+    log.info("Predicciones de fase de grupos guardadas en %s", output_path)
+
+    print("\n" + "=" * 70)
+    print("PREDICCIONES FASE DE GRUPOS (Monte Carlo)")
+    print("=" * 70)
+    for group_name in sorted(predictions_df["group"].unique()):
+        grp = predictions_df[predictions_df["group"] == group_name]
+        print(f"\nGrupo {group_name}:")
+        print("-" * 50)
+        for _, row in grp.iterrows():
+            print(f"  {row['home']:<22} vs {row['away']:<22}  ->  {int(row['predicted_home_goals'])}-{int(row['predicted_away_goals'])}  (n={row['samples']})")
+    print("=" * 70)
+
+    return predictions_df

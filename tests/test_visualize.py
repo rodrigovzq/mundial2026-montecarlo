@@ -117,6 +117,54 @@ class TestGroupStagePredictions:
         assert output.stat().st_size > 0
 
 
+class TestExportGroupStagePredictions:
+    """Prueba la exportacion de predicciones de grupo desde Monte Carlo."""
+
+    def test_export_empty_df_does_not_crash(self, tmp_path):
+        from src.visualize import export_group_stage_predictions
+        empty_df = pd.DataFrame()
+        result = export_group_stage_predictions(empty_df, str(tmp_path / "empty.csv"))
+        assert result.empty
+
+    def test_export_creates_csv(self, tmp_path):
+        from src.visualize import export_group_stage_predictions
+        df = pd.DataFrame([
+            {"group": "A", "home": "A1", "away": "A2",
+             "predicted_home_goals": 2, "predicted_away_goals": 1, "samples": 100},
+        ])
+        output = tmp_path / "group_preds.csv"
+        export_group_stage_predictions(df, str(output))
+        assert output.exists()
+        assert output.stat().st_size > 0
+
+    def test_export_csv_readable(self, tmp_path):
+        from src.visualize import export_group_stage_predictions
+        df = pd.DataFrame([
+            {"group": "A", "home": "A1", "away": "A2",
+             "predicted_home_goals": 2, "predicted_away_goals": 1, "samples": 100},
+        ])
+        output = tmp_path / "group_preds.csv"
+        export_group_stage_predictions(df, str(output))
+        df_check = pd.read_csv(output)
+        assert "group" in df_check.columns
+        assert "home" in df_check.columns
+        assert "away" in df_check.columns
+        assert "predicted_home_goals" in df_check.columns
+        assert "predicted_away_goals" in df_check.columns
+        assert "samples" in df_check.columns
+        assert len(df_check) == 1
+
+    def test_export_returns_dataframe(self, tmp_path):
+        from src.visualize import export_group_stage_predictions
+        df = pd.DataFrame([
+            {"group": "A", "home": "A1", "away": "A2",
+             "predicted_home_goals": 2, "predicted_away_goals": 1, "samples": 100},
+        ])
+        result = export_group_stage_predictions(df, str(tmp_path / "test.csv"))
+        assert isinstance(result, pd.DataFrame)
+        assert len(result) == 1
+
+
 # Helpers
 def _make_sample_snapshots() -> list[pd.DataFrame]:
     """Crea snapshots de prueba para tests de visualizacion."""

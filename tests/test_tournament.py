@@ -167,8 +167,10 @@ class TestKnockoutBracket:
     def test_simulate_tournament_returns_winner(self, config, rng):
         from src.tournament import simulate_tournament
         predictor = _make_mock_predictor()
-        winner = simulate_tournament(predictor, config, rng)
+        winner, match_results = simulate_tournament(predictor, config, rng)
         assert isinstance(winner, str)
+        assert isinstance(match_results, list)
+        assert len(match_results) > 0  # should have at least some group matches
 
 
 class TestExtraTimeAndPenalties:

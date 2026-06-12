@@ -28,6 +28,13 @@ Thumbs.db
 .ipynb_checkpoints/
 *.ipynb
 
+# Especificación (no incluir en repo público)
+SPEC.md
+
+# Tool artifacts
+.atl/
+docs/
+
 # Datos descargados (no commitear datasets grandes)
 data/matches.csv
 data/*.db

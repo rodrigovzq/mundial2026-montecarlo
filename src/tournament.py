@@ -51,6 +51,57 @@ def simulate_group(
     return df
 
 
+def simulate_group_with_details(
+    teams: list[str],
+    predictor: MatchPredictor,
+    config: SimulationConfig,
+    rng: np.random.Generator,
+) -> tuple[pd.DataFrame, list[dict]]:
+    """Simula fase de grupos y devuelve (standings, match_results).
+
+    match_results: list of dicts with keys home, away, group, goals_home, goals_away.
+    """
+    standings = {
+        t: {"team": t, "points": 0, "gf": 0, "ga": 0, "gd": 0}
+        for t in teams
+    }
+    match_results: list[dict] = []
+
+    for i in range(len(teams)):
+        for j in range(i + 1, len(teams)):
+            home, away = teams[i], teams[j]
+            g_home, g_away = predictor.predict(home, away, rng)
+
+            match_results.append({
+                "home": home,
+                "away": away,
+                "group": "",  # filled by caller
+                "goals_home": int(g_home),
+                "goals_away": int(g_away),
+            })
+
+            standings[home]["gf"] += g_home
+            standings[home]["ga"] += g_away
+            standings[home]["gd"] += g_home - g_away
+            standings[away]["gf"] += g_away
+            standings[away]["ga"] += g_home
+            standings[away]["gd"] += g_away - g_home
+
+            if g_home > g_away:
+                standings[home]["points"] += 3
+            elif g_away > g_home:
+                standings[away]["points"] += 3
+            else:
+                standings[home]["points"] += 1
+                standings[away]["points"] += 1
+
+    df = pd.DataFrame.from_records(list(standings.values()))
+    df = df.sort_values(["points", "gd", "gf"], ascending=False).reset_index(drop=True)
+    df.index += 1
+    df["position"] = df.index
+    return df, match_results
+
+
 def select_best_third_places(
     all_group_results: list[pd.DataFrame],
 ) -> list[dict]:
@@ -135,24 +186,30 @@ def simulate_tournament(
     predictor: MatchPredictor,
     config: SimulationConfig,
     rng: np.random.Generator,
-    group_winners: list[str] | None = None,
-    group_runners_up: list[str] | None = None,
-    all_group_results: list[pd.DataFrame] | None = None,
-) -> str:
-    """Simula un torneo completo desde grupos hasta final, o desde KO si se proveen resultados."""
-    if all_group_results is None:
-        import json
-        with open("data/teams.json", "r") as f:
-            teams_data = json.load(f)
+) -> tuple[str, list[dict]]:
+    """Simula un torneo completo desde grupos hasta final.
 
-        groups: dict[str, list[str]] = {}
-        for team in teams_data["teams"]:
-            groups.setdefault(team["group"], []).append(team["name"])
+    Retorna (champion, group_match_results).
+    """
+    import json
+    with open("data/teams.json", "r") as f:
+        teams_data = json.load(f)
 
-        all_group_results = []
-        for group_name in sorted(groups.keys()):
-            grp = simulate_group(groups[group_name], predictor, config, rng)
-            all_group_results.append(grp)
+    groups: dict[str, list[str]] = {}
+    for team in teams_data["teams"]:
+        groups.setdefault(team["group"], []).append(team["name"])
+
+    all_group_results: list[pd.DataFrame] = []
+    all_match_results: list[dict] = []
+
+    for group_name in sorted(groups.keys()):
+        grp_df, grp_matches = simulate_group_with_details(
+            groups[group_name], predictor, config, rng,
+        )
+        for m in grp_matches:
+            m["group"] = group_name
+        all_match_results.extend(grp_matches)
+        all_group_results.append(grp_df)
 
     group_winners = [g.iloc[0]["team"] for g in all_group_results]
     group_runners_up = [g.iloc[1]["team"] for g in all_group_results]
@@ -178,4 +235,4 @@ def simulate_tournament(
 
     # Final
     winner = resolve_knockout_match(finalists[0], finalists[1], predictor, config, rng)
-    return winner
+    return winner, all_match_results

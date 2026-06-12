@@ -24,7 +24,7 @@ from config import SimulationConfig
 from src.data_loader import load_matches
 from src.model import MatchPredictor
 from src.simulation import run_simulation
-from src.visualize import plot_convergence, build_top10_table, export_top10, build_group_stage_predictions_table
+from src.visualize import plot_convergence, build_top10_table, export_top10, export_group_stage_predictions
 
 logging.basicConfig(
     level=logging.INFO,
@@ -95,19 +95,34 @@ def main() -> int:
              len(predictor.strength_matrix))
     log.info("Tiempo de preparacion: %.2f seg", time.time() - t0)
 
-    # 3b. Predicciones de fase de grupos (resultados mas probables)
-    log.info("Generando predicciones de fase de grupos...")
-    group_preds = build_group_stage_predictions_table(predictor, teams_df)
-    log.info("Predicciones generadas para %d partidos de grupo", len(group_preds))
-
     # 4. Simulacion Montecarlo
     log.info("Iniciando simulacion de %d mundiales...", config.ITERATIONS)
     t1 = time.time()
     rng = np.random.default_rng(config.SEED)
-    winner_counts, snapshots = run_simulation(predictor, config, rng)
+    winner_counts, snapshots, match_score_counts = run_simulation(predictor, config, rng)
     elapsed = time.time() - t1
     log.info("Simulacion completada en %.2f seg (%.2f iter/seg)",
              elapsed, config.ITERATIONS / elapsed)
+
+    # 4b. Predicciones de fase de grupos (desde Monte Carlo)
+    log.info("Procesando predicciones de fase de grupos desde Monte Carlo...")
+    group_rows = []
+    for (group, home, away), scores in match_score_counts.items():
+        most_frequent = max(scores, key=scores.get)
+        g_home, g_away = most_frequent.split("-")
+        row = {
+            "group": group,
+            "home": home,
+            "away": away,
+            "predicted_home_goals": int(g_home),
+            "predicted_away_goals": int(g_away),
+            "samples": sum(scores.values()),
+        }
+        group_rows.append(row)
+
+    group_preds_df = pd.DataFrame(group_rows)
+    export_group_stage_predictions(group_preds_df, "results/group_stage_predictions.csv")
+    log.info("Predicciones generadas para %d partidos de grupo desde Monte Carlo", len(group_preds_df))
 
     # 5. Resultados
     champion = max(winner_counts, key=winner_counts.get)
@@ -124,7 +139,7 @@ def main() -> int:
 
     log.info("=" * 60)
     log.info("SIMULACION COMPLETADA EXITOSAMENTE")
-    log.info("Resultados en: results/convergence.png, results/top10.csv, results/group_stage_predictions.csv")
+    log.info("Resultados en: results/convergence.png, results/top10.csv, results/group_stage_predictions.csv (Monte Carlo)")
     log.info("=" * 60)
 
     return 0

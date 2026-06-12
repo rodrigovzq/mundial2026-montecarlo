@@ -10,7 +10,7 @@ class TestSimulationConfig:
     def test_default_values(self):
         """Verifica valores por defecto segun SPEC Section 6.1."""
         cfg = SimulationConfig()
-        assert cfg.ITERATIONS == 10_000
+        assert cfg.ITERATIONS == 100_000
         assert cfg.SEED == 42
         assert cfg.LAMBDA_DECAY == 0.15
         assert cfg.DECAY_WINDOW == 30
